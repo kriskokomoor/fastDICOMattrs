@@ -1,6 +1,6 @@
 # fastDICOM
 
-`fastDICOM` is a small, public-domain C++17 library for retrieving one or many
+`fastDICOM` is a small, public-domain C++20 library for retrieving one or many
 top-level attributes from DICOM Part 10 files with DCMTK. It is designed for
 metadata scans over large image collections and for later wrapping in Python.
 
@@ -11,7 +11,7 @@ queries.
 
 ## Build
 
-Install a C++17 compiler, CMake, and the DCMTK development package. On Debian or
+Install a C++20 compiler, CMake, and the DCMTK development package. On Debian or
 Ubuntu, the latter is `libdcmtk-dev`.
 
 ```sh

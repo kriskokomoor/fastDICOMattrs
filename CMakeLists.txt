@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.16)
 
 project(fastDICOM VERSION 0.1.0 LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 option(FASTDICOM_BUILD_CLI "Build the command-line example" ON)
 option(FASTDICOM_BUILD_TESTS "Build tests" ON)
 
@@ -9,7 +14,9 @@ find_package(DCMTK REQUIRED)
 
 add_library(fastdicom src/tags.cpp)
 add_library(fastDICOM::fastdicom ALIAS fastdicom)
-target_compile_features(fastdicom PUBLIC cxx_std_17)
+target_compile_features(fastdicom PUBLIC cxx_std_20)
+target_compile_options(fastdicom PRIVATE
+  $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall -Wextra -Wpedantic>)
 target_include_directories(fastdicom
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

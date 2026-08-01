@@ -5,7 +5,7 @@ LDFLAGS ?=
 LDLIBS ?= -ldcmdata -lofstd -loflog -lz -pthread
 
 CPPFLAGS += -Iinclude
-CXXFLAGS += -std=c++17
+CXXFLAGS += -std=c++20
 
 BUILD_DIR := build-make
 LIB_OBJECT := $(BUILD_DIR)/tags.o
