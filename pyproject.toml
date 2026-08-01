@@ -10,6 +10,9 @@ readme = "README.md"
 license = { text = "Unlicense" }
 requires-python = ">=3.9"
 
+[project.optional-dependencies]
+test = ["pytest", "pydicom"]
+
 [tool.scikit-build]
 minimum-version = "0.10"
 build-dir = "build/{wheel_tag}"
@@ -18,3 +21,6 @@ build-dir = "build/{wheel_tag}"
 FASTDICOM_BUILD_PYTHON = "ON"
 FASTDICOM_BUILD_CLI = "OFF"
 FASTDICOM_BUILD_TESTS = "OFF"
+
+[tool.pytest.ini_options]
+testpaths = ["tests/python"]
