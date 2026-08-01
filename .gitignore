@@ -3,6 +3,9 @@
 /cmake-build-*/
 /.cache/
 /.clangd/
+/.venv/
+__pycache__/
+*.egg-info/
 .DS_Store
 *.dcm
 

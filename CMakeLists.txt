@@ -9,6 +9,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 option(FASTDICOM_BUILD_CLI "Build the command-line example" ON)
 option(FASTDICOM_BUILD_TESTS "Build tests" ON)
+option(FASTDICOM_BUILD_PYTHON "Build the pybind11 Python bindings" OFF)
 
 find_package(DCMTK REQUIRED)
 
@@ -68,4 +69,12 @@ if(BUILD_TESTING AND FASTDICOM_BUILD_TESTS)
 
   add_executable(fastdicom-file-test tests/dicom_file_test.cpp)
   target_link_libraries(fastdicom-file-test PRIVATE fastdicom)
+endif()
+
+if(FASTDICOM_BUILD_PYTHON)
+  find_package(pybind11 CONFIG REQUIRED)
+  pybind11_add_module(_fastdicom python/fastdicom/bindings.cpp)
+  target_link_libraries(_fastdicom PRIVATE fastdicom)
+  install(TARGETS _fastdicom LIBRARY DESTINATION fastdicom)
+  install(FILES python/fastdicom/__init__.py DESTINATION fastdicom)
 endif()
