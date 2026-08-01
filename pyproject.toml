@@ -1,0 +1,20 @@
+[build-system]
+requires = ["scikit-build-core>=0.10", "pybind11>=2.12"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "fastdicom"
+version = "0.1.0"
+description = "Fast DICOM metadata extraction, backed by a C++/DCMTK core"
+readme = "README.md"
+license = { text = "Unlicense" }
+requires-python = ">=3.9"
+
+[tool.scikit-build]
+minimum-version = "0.10"
+build-dir = "build/{wheel_tag}"
+
+[tool.scikit-build.cmake.define]
+FASTDICOM_BUILD_PYTHON = "ON"
+FASTDICOM_BUILD_CLI = "OFF"
+FASTDICOM_BUILD_TESTS = "OFF"

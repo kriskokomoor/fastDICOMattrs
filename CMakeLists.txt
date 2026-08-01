@@ -32,29 +32,35 @@ else()
 endif()
 
 include(GNUInstallDirs)
-install(TARGETS fastdicom EXPORT fastDICOMTargets
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(EXPORT fastDICOMTargets
-  FILE fastDICOMTargets.cmake
-  NAMESPACE fastDICOM::
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fastDICOM)
-include(CMakePackageConfigHelpers)
-configure_package_config_file(
-  cmake/fastDICOMConfig.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/fastDICOMConfig.cmake
-  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fastDICOM)
-write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/fastDICOMConfigVersion.cmake
-  VERSION ${PROJECT_VERSION}
-  COMPATIBILITY SameMajorVersion)
-install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/fastDICOMConfig.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/fastDICOMConfigVersion.cmake
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fastDICOM)
+
+# The C++ install/export tree is irrelevant to a Python wheel (SKBUILD is set
+# by scikit-build-core) and would otherwise scatter headers/.a/cmake config
+# files into site-packages alongside the fastdicom/ package.
+if(NOT SKBUILD)
+  install(TARGETS fastdicom EXPORT fastDICOMTargets
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  install(EXPORT fastDICOMTargets
+    FILE fastDICOMTargets.cmake
+    NAMESPACE fastDICOM::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fastDICOM)
+  include(CMakePackageConfigHelpers)
+  configure_package_config_file(
+    cmake/fastDICOMConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/fastDICOMConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fastDICOM)
+  write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/fastDICOMConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion)
+  install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/fastDICOMConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/fastDICOMConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fastDICOM)
+endif()
 
 if(FASTDICOM_BUILD_CLI)
   add_executable(fastdicom-cli examples/fastdicom.cpp)
