@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
       - name: Install DCMTK
         run: sudo apt-get update && sudo apt-get install -y libdcmtk-dev
       - name: Configure
@@ -20,3 +23,7 @@ jobs:
         run: cmake --build build --parallel
       - name: Test
         run: ctest --test-dir build --output-on-failure
+      - name: Install Python bindings
+        run: pip install ".[test]"
+      - name: Test Python bindings
+        run: pytest
