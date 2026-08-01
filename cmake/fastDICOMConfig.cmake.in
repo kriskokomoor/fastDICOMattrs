@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(DCMTK)
+
+include("${CMAKE_CURRENT_LIST_DIR}/fastDICOMTargets.cmake")
+check_required_components(fastDICOM)

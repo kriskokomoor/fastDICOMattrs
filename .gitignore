@@ -1,0 +1,10 @@
+/build/
+/build-*/
+/cmake-build-*/
+/.cache/
+/.clangd/
+.DS_Store
+*.dcm
+
+/DICOM tools prompt.pdf
+/fastattrs.tar.gz
