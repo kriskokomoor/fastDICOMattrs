@@ -213,6 +213,31 @@ This library reads attributes; it does not validate an entire DICOM object or
 anonymize protected health information. Applications must handle DICOM values as
 sensitive data and must not log them unintentionally.
 
+## fastDICOM family
+
+This library (published here as `fastDICOM`, referred to as `fastDICOMattrs` in sibling
+repositories) is one of two DICOM libraries in a small family, alongside two independent reference
+applications built on top of them:
+
+```text
+fastDICOM
+│
+├── libraries
+│     ├── fastDICOMattrs (this repository)
+│     │     fast shallow/top-level attribute inspection
+│     └── fastDICOMstructure
+│           structural parsing, mutation, reconstruction
+│
+└── reference applications
+      ├── fastDICOMgateway
+      │     stateless pre-persistence policy boundary demo (HTTP / Cloud Run /
+      │     Healthcare API); does not currently use this library
+      └── fastDICOMarchive
+            stateful qualified archive/cohort/reconstruction system; uses this
+            library as its fast root-tag probe (see its own README's
+            "Relationship To fastDICOMattrs")
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome. Run the test suite before submitting
