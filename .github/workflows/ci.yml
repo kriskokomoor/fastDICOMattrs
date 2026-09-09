@@ -11,12 +11,12 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.x"
       - name: Install DCMTK
-        run: sudo apt-get update && sudo apt-get install -y libdcmtk-dev
+        run: sudo apt-get update && sudo apt-get install -y libdcmtk-dev libnsl-dev
       - name: Configure
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
       - name: Build
