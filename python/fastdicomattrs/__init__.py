@@ -49,6 +49,21 @@ _LIB_NAMES = ["libfastdicomattrs_c.so", "libfastdicomattrs_c.dylib",
               "fastdicomattrs_c.dll"]
 
 
+def _packaged_library_path() -> Optional[Path]:
+    """The shared library a `pip install`-ed wheel places directly beside
+    this file (see pyproject.toml's [tool.scikit-build.install] components
+    and CMakeLists.txt's FDS_PYTHON_WHEEL_INSTALL) -- present for a normal
+    installed package, absent for a plain PYTHONPATH-injected source-tree
+    checkout, which instead falls back to _candidate_dirs() below.
+    """
+    here = Path(__file__).resolve().parent
+    for name in _LIB_NAMES:
+        candidate = here / name
+        if candidate.is_file():
+            return candidate
+    return None
+
+
 def _candidate_dirs():
     here = Path(__file__).resolve().parent
     repo_root = here.parent.parent
@@ -63,6 +78,9 @@ def _find_library() -> str:
     override = os.environ.get("FASTDICOMATTRS_LIB")
     if override:
         return override
+    packaged = _packaged_library_path()
+    if packaged is not None:
+        return str(packaged)
     for directory in _candidate_dirs():
         for name in _LIB_NAMES:
             candidate = directory / name

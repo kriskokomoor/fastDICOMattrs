@@ -24,7 +24,22 @@
 > policy (a decision about *what* to remove), which is `fastDICOMstructure`'s concern, not this
 > library's. See `docs/architecture/ADR-001-ATTRS-NAMING-AND-LAYERING.md`.
 
+## Installing the Python package
+
+```sh
+pip install .
+python3 -c "import fastdicomattrs"
+```
+
+installs the `fastdicomattrs` Python package together with its compiled native library as one `pip`-managed unit (built via [scikit-build-core](https://scikit-build-core.readthedocs.io/), which drives the same CMake build described below). No CMake build directory, `PYTHONPATH`, or environment variable is needed afterward — `import fastdicomattrs` finds its own packaged library automatically. This is the normal path for using the Python API; requires a C++20 compiler and CMake 3.16+ at install time (there are no prebuilt wheels yet — see `FASTDICOMATTRS_LIB` below for how to point at a library built some other way instead, e.g. in a container that builds attrs separately from installing this package).
+
+`FASTDICOMATTRS_LIB=/path/to/libfastdicomattrs_c.so` always overrides the packaged library, taking precedence over everything else — this is how the family's Docker images and CI already use attrs (built once, pointed at explicitly), and remains the documented mechanism for that.
+
+`pip install -e .` also works for active development, with one caveat: it rebuilds the native library on every install, but ctypes discovery does not yet know to look at the editable install's own site-packages copy — it falls back to a `build/` directory if one already exists alongside the source tree (see "Build and test" below), which may be stale relative to the editable rebuild. Run `cmake --build build` (or delete any stray `build/` directory and rely on `FASTDICOMATTRS_LIB`) to keep that fallback in sync, or set `FASTDICOMATTRS_LIB` explicitly while iterating.
+
 ## Build and test
+
+The above is sufficient for using the Python API. This section is for C++ development, running the test suite, or producing the standalone CMake package (headers, static/shared library, and `fastdicomattrsConfig.cmake` export) for a native C++ consumer — `find_package(fastdicomattrs CONFIG REQUIRED)` — which `pip install` above does not install (the Python wheel intentionally contains only the Python package and its one required shared library, nothing else).
 
 Requirements are a C++20 compiler, CMake 3.16 or newer, Python 3 for the Python tests, and Catch2 3.x for C++ tests. Catch2 3 is not available as a system package on all platforms (e.g. Ubuntu's `catch2` apt package is still 2.x); if `find_package(Catch2 3 REQUIRED)` fails, build and install Catch2 3 from source first, or configure with `-DFDS_BUILD_TESTS=OFF` to build only the library, C ABI, and Python binding without the C++ test suite.
 

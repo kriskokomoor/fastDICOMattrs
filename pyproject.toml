@@ -1,0 +1,30 @@
+[build-system]
+requires = ["scikit-build-core>=0.10"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "fastdicomattrs"
+version = "0.2.0"
+description = "Structural DICOM transformation engine (C++ core, ctypes Python binding) for pre-persistence inspection and mutation"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "Kris Kokomoor" }]
+
+[tool.scikit-build]
+wheel.packages = ["python/fastdicomattrs"]
+# No CPython extension module is built -- the shared library is loaded via
+# ctypes at runtime, not linked against a specific CPython ABI -- so the
+# wheel should be tagged py3-none-<platform> (installable on any supported
+# interpreter matching requires-python), not pinned to the CPython version
+# that happened to build it.
+wheel.py-api = "py3"
+build.verbose = true
+cmake.build-type = "Release"
+install.components = ["python_module"]
+
+[tool.scikit-build.cmake.define]
+FDS_BUILD_TESTS = "OFF"
+FDS_BUILD_BENCH = "OFF"
+FDS_BUILD_ABI = "ON"
+FDS_PYTHON_WHEEL_INSTALL = "ON"

@@ -15,6 +15,12 @@ endif()
 option(FDS_BUILD_TESTS "Build fastDICOMattrs unit/integration tests" ON)
 option(FDS_BUILD_BENCH "Build fastDICOMattrs benchmark scaffold" ON)
 option(FDS_BUILD_ABI "Build the fastDICOMattrs C ABI shared library" ON)
+# Additive, off by default: installs fastdicomattrs_c a second time, into a
+# location the Python wheel's own packaging (see pyproject.toml) expects
+# alongside python/fastdicomattrs. Leaves the standalone CMake package
+# install (below, unconditional) untouched -- only scikit-build-core's own
+# build turns this on via -DFDS_PYTHON_WHEEL_INSTALL=ON.
+option(FDS_PYTHON_WHEEL_INSTALL "Also install fastdicomattrs_c for Python wheel packaging" OFF)
 
 add_compile_options(-Wall -Wextra)
 
@@ -113,6 +119,27 @@ if(FDS_BUILD_ABI)
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
   install(DIRECTORY abi/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+  if(FDS_PYTHON_WHEEL_INSTALL)
+    # Second, additive install of the same target: puts the shared library
+    # directly alongside python/fastdicomattrs's __init__.py inside the
+    # wheel, so an installed package can find it without any build-tree or
+    # environment-variable knowledge. Does not replace or alter the
+    # unconditional install(TARGETS fastdicomattrs_c ...) above.
+    # COMPONENT python_module: not installed by a plain `cmake --install
+    # <prefix>` (which installs every component, including this one, so
+    # native consumers see no change) but selectable in isolation via
+    # `--component python_module` -- which is what confines the Python
+    # wheel to just this one file plus python/fastdicomattrs (see
+    # pyproject.toml's [tool.scikit-build.install] components), instead of
+    # sweeping in the unconditional install's headers/static-lib/CMake
+    # package files above.
+    install(TARGETS fastdicomattrs_c
+      COMPONENT python_module
+      LIBRARY DESTINATION fastdicomattrs
+      RUNTIME DESTINATION fastdicomattrs
+    )
+  endif()
 endif()
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
