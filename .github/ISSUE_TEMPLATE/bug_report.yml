@@ -1,0 +1,33 @@
+name: Bug report
+description: Report a reproducible defect
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproduction
+      description: Provide a minimal reproduction without protected health information.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Version or commit
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Platform and compiler
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Data safety
+      options:
+        - label: I confirm that this report and its attachments contain no protected health information.
+          required: true

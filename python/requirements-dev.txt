@@ -1,0 +1,6 @@
+# Optional, dev/test-only dependencies -- never required to build or use
+# the library itself. Currently just the --reference pydicom mode of
+# python/fastdicomattrs/corpus.py, which cross-checks this library's
+# structural parse of a file against pydicom's (see
+# docs/roundtrip-contract.md "Known gaps").
+pydicom

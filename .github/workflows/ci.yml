@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y catch2
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Test C++
+        run: ctest --test-dir build --output-on-failure
+      - name: Test Python
+        run: PYTHONPATH=python python3 -m unittest discover -s tests/python -v
+      - name: Verify install
+        run: cmake --install build --prefix "${{ runner.temp }}/fastdicomattrs-install"

@@ -1,0 +1,40 @@
+# Build output
+build/
+build-*/
+cmake-build-*/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.venv/
+venv/
+
+# CMake/compiler output
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+Testing/
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+
+# Editor/OS
+.DS_Store
+
+# Maintainer-only: the complete NEMA PS3.6 source XML is not redistributed
+# in this repository (see THIRD_PARTY_NOTICES.md). tools/fetch_ps3.6_source.py
+# re-acquires it here for local dictionary regeneration only; never commit it.
+/thirdparty/dicom_standard/PS3.6.xml

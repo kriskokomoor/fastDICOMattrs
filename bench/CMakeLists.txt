@@ -1,0 +1,2 @@
+add_executable(fds_bench_parse bench_parse.cpp)
+target_link_libraries(fds_bench_parse PRIVATE fastdicomattrs::fastdicomattrs)
